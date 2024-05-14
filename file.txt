@@ -1,0 +1,55 @@
+<FlatList
+            style={styles.noteContainer}
+            data={notes}
+            scrollEnabled={false}
+            renderItem={({ item }) => (
+
+              <LinearGradient colors={['#a74cf2', '#8c56ef', '#715de9', '#5561e1', '#3963d7']} style={styles.gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
+                  <Text style={item.isSelected ? styles.noteLineThrough : styles.note} onPress={() => selectedNote(item.id)}>{item.note}</Text>
+                  <Ionicons name="edit" size={30} color="white" style={{ position: 'absolute', right: 10, top: 15 }} onPress={() => editPressed(item.id)}></Ionicons>
+                  <Modal
+                    visible={isVisibleNoteUpdate && editNoteId === item.id}
+                    transparent={true}
+                    animationType="none"
+                    onRequestClose={() => { setIsVisibleNoteUpdate(false); setEditNoteId(null); }}>
+
+                    <TouchableOpacity style={styles.modalUpdateNote} onPress={() => {
+                      setIsVisibleNoteUpdate(false);
+                      Animated.timing(animationType, {
+                        toValue: -300,
+                        duration: 300,
+                        useNativeDriver: false,
+                      }).start();
+                    }}>
+
+                      <Animated.View style={[styles.modalContentUpdateNote, { transform: [{ translateY: animationType }] }]}>
+                        <SafeAreaView>
+                          <Text style={{ fontFamily: 'Roboto', fontWeight: 'bold', fontSize: 20, position: 'relative', bottom: 5, color: 'black' }}>Update your note</Text>
+                          <TextInput
+                            style={styles.input}
+                            placeholder="  Update your note"
+                            value={item.note}
+                            maxLength={15}
+                            onChangeText={(text) => handleInputChange(text, item.id, item.isSelected)}
+                            />
+
+
+                          <AlertNotificationRoot>
+                            <View style={styles.buttonForm}>
+
+                              <Button title="Update note" onPress={() => updateInputNote(item.note, item.id, item.isSelected)} />
+                            </View>
+                          </AlertNotificationRoot>
+                        </SafeAreaView>
+                      </Animated.View>
+                    </TouchableOpacity>
+                  </Modal>
+                  <TouchableOpacity>
+
+
+                      <Ionicons name="delete" size={30} color="white" style={{ position: 'absolute', right: 50, bottom: 10 }} onPress={() => handleDeleteNote(item.id)} />
+
+                  </TouchableOpacity>
+                </LinearGradient>
+            )}
+        keyExtractor={(item, index) => index.toString()} />
