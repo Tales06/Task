@@ -85,22 +85,22 @@ export default function NavBar({ toggleTheme, isTheme, onTaskMarkedAsDone }: Nav
     /**
      * @function useEffect - React hook that is called when the component mounts. It adds a listener to the keyboard hide event and removes it when the component unmounts.
      */
-    useEffect(() => {
-        const hideKeyBoard = () => {
-            Keyboard.dismiss();
-        };
+    // useEffect(() => {
+    //     const hideKeyBoard = () => {
+    //         Keyboard.dismiss();
+    //     };
 
-        if (!isSearchVisible) {
-            hideKeyBoard();
-        }
+    //     if (!isSearchVisible) {
+    //         hideKeyBoard();
+    //     }
 
-        Keyboard.addListener('keyboardDidHide', hideKeyBoard);
+    //     Keyboard.addListener('keyboardDidHide', hideKeyBoard);
 
-        return () => {
-            Keyboard.removeAllListeners('keyboardDidHide');
-        };
+    //     return () => {
+    //         Keyboard.removeAllListeners('keyboardDidHide');
+    //     };
 
-    });
+    // });
 
 
     /**
@@ -185,6 +185,11 @@ export default function NavBar({ toggleTheme, isTheme, onTaskMarkedAsDone }: Nav
         }
     };
 
+    const handleCloseModal = () => {
+        setIsSearchVisible(false);
+        Keyboard.dismiss(); // Nasconde la tastiera
+    };
+
     return (
         <SafeAreaView style={styles.container}>
 
@@ -196,11 +201,13 @@ export default function NavBar({ toggleTheme, isTheme, onTaskMarkedAsDone }: Nav
                 </TouchableOpacity>
                 <SafeAreaView>
 
+
                         <TextInput
                             style={styles.inputSearch}
                             placeholder="    ...Search"
                             placeholderTextColor={isTheme ? "black" : "white"}
                             onPressIn={() => setIsSearchVisible(true)}
+
 
 
 
@@ -210,10 +217,10 @@ export default function NavBar({ toggleTheme, isTheme, onTaskMarkedAsDone }: Nav
                         visible={isSearchVisible}
                         animationType="slide"
                         transparent={true}
-                        onRequestClose={() => setIsSearchVisible(false)}
+                        onRequestClose={() => handleCloseModal()}
                     >
                         <View style={isTheme ? styles.modalSearchWhite : styles.modalSearchBlack}>
-                            <IonIcons name="keyboard-backspace" style={styles.icon} size={50} onPress={() => setIsSearchVisible(false)} />
+                            <IonIcons name="keyboard-backspace" style={styles.icon} size={50} onPress={() => handleCloseModal()} />
 
                             <TextInput
                                 style={[styles.inputSearchModal, { color: isTheme ? "black" : "white" }]}
@@ -273,9 +280,10 @@ export default function NavBar({ toggleTheme, isTheme, onTaskMarkedAsDone }: Nav
 
                             <IonIcons name="account-circle-outline" size={50} color="black" />
                             <Text style={styles.text}>Hello User</Text>
-
-                            <IonIcons name="theme-light-dark" size={50} color="black" onPress={theme} />
-                            <Text style={styles.text}>Change theme</Text>
+                            <TouchableOpacity onPress={theme}>
+                                <IonIcons name="theme-light-dark" size={50} color="black" onPress={theme} />
+                                <Text style={[styles.text, {bottom: 40}]}>Change theme</Text>
+                            </TouchableOpacity>
 
                         </View>
                     </Animated.View>

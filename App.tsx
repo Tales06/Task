@@ -15,6 +15,7 @@ import Ionicons from 'react-native-vector-icons/AntDesign';
 import { ALERT_TYPE, AlertNotificationRoot, Dialog, Toast } from "react-native-alert-notification";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { width, height } from "./dimension";
+import NoTaskPresent from "./NoTaskPresents";
 
 
 
@@ -315,6 +316,7 @@ export default function App() {
 
     <View style={isTheme ? styles.containerWhite : styles.containerDark}>
 
+
       <View>
           <FlatList
             style={styles.noteContainer}
@@ -382,6 +384,9 @@ export default function App() {
 
 
       <ButtonNote onNoteAdded={handleNoteAdded} />
+      {notes.length === 0 && (
+        <NoTaskPresent isTheme={isTheme}/>
+      )}
 
     </View>
   );
